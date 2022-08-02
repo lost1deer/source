@@ -98,33 +98,46 @@ void  OSTimeDly (INT32U ticks)
 */
 
 #if OS_TIME_DLY_HMSM_EN > 0u
-unsigned int sleep (unsigned int seconds)
+INT8U  OSTimeDlyHMSM(INT8U   hours,
+	INT8U   minutes,
+	INT8U   seconds,
+	INT16U  ms)
 {
-    INT32U ticks;
+	INT32U ticks;
 
 
-    if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
-        return (OS_ERR_TIME_DLY_ISR);
-    }
-    if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
-        return (OS_ERR_SCHED_LOCKED);
-    }
+	if (OSIntNesting > 0u) {                     /* See if trying to call from an ISR                  */
+		return (OS_ERR_TIME_DLY_ISR);
+	}
+	if (OSLockNesting > 0u) {                    /* See if called with scheduler locked                */
+		return (OS_ERR_SCHED_LOCKED);
+	}
 #if OS_ARG_CHK_EN > 0u
-    if (seconds == 0u){
-        return (OS_ERR_TIME_ZERO_DLY);
-    }
-    if (seconds> 3540u){                         /*3540=59*60
-        return (OS_ERR_TIME_INVALID_MINUTES);    /* Validate arguments to be within range              */
-    }
-    if (seconds > 59u) {
-        return (OS_ERR_TIME_INVALID_SECONDS);
-    }
+	if (hours == 0u) {
+		if (minutes == 0u) {
+			if (seconds == 0u) {
+				if (ms == 0u) {
+					return (OS_ERR_TIME_ZERO_DLY);
+				}
+			}
+		}
+	}
+	if (minutes > 59u) {
+		return (OS_ERR_TIME_INVALID_MINUTES);    /* Validate arguments to be within range              */
+	}
+	if (seconds > 59u) {
+		return (OS_ERR_TIME_INVALID_SECONDS);
+	}
+	if (ms > 999u) {
+		return (OS_ERR_TIME_INVALID_MS);
+	}
 #endif
-                                                 /* Compute the total number of clock ticks required.. */
-                                                 /* .. (rounded to the nearest tick)                   */
-    ticks = ((INT32U)seconds) * OS_TICKS_PER_SEC;
-    OSTimeDly(ticks);
-    return (OS_ERR_NONE);
+	/* Compute the total number of clock ticks required.. */
+	/* .. (rounded to the nearest tick)                   */
+	ticks = ((INT32U)hours * 3600uL + (INT32U)minutes * 60uL + (INT32U)seconds) * OS_TICKS_PER_SEC
+		+ OS_TICKS_PER_SEC * ((INT32U)ms + 500uL / OS_TICKS_PER_SEC) / 1000uL;
+	OSTimeDly(ticks);
+	return (OS_ERR_NONE);
 }
 #endif
 /*$PAGE*/
