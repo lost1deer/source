@@ -1253,7 +1253,10 @@ void          OSTaskRegSet            (INT8U            prio,
 void          OSTimeDly               (INT32U           ticks);
 
 #if OS_TIME_DLY_HMSM_EN > 0u
-unsigned int  sleep                   (unsigned int seconds);
+INT8U         OSTimeDlyHMSM(INT8U            hours,
+	                        INT8U            minutes,
+	                        INT8U            seconds,
+	                        INT16U           ms);
 #endif
 
 #if OS_TIME_DLY_RESUME_EN > 0u
