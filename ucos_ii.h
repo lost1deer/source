@@ -19,7 +19,7 @@
 * licensing fee.
 *********************************************************************************************************
 */
-
+#include <stdint.h>
 #ifndef   OS_uCOS_II_H
 #define   OS_uCOS_II_H
 
@@ -2032,7 +2032,7 @@ void          OSCtxSw                 (void);
 *********************************************************************************************************
 */
 //typedef unsigned long long size_t;
-typedef unsigned int uint64_t;
+
 typedef struct sched_param {
     int      sched_priority; /* process execution scheduling priority */
     uint64_t slice;          /* time slice in SCHED_RR mode (ms) */
