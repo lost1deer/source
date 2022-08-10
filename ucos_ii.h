@@ -19,7 +19,7 @@
 * licensing fee.
 *********************************************************************************************************
 */
-
+#include <stdint.h>
 #ifndef   OS_uCOS_II_H
 #define   OS_uCOS_II_H
 
@@ -1253,7 +1253,10 @@ void          OSTaskRegSet            (INT8U            prio,
 void          OSTimeDly               (INT32U           ticks);
 
 #if OS_TIME_DLY_HMSM_EN > 0u
-unsigned int  sleep                   (unsigned int seconds);
+INT8U         OSTimeDlyHMSM(INT8U            hours,
+	                        INT8U            minutes,
+	                        INT8U            seconds,
+	                        INT16U           ms);
 #endif
 
 #if OS_TIME_DLY_RESUME_EN > 0u
@@ -2032,7 +2035,7 @@ void          OSCtxSw                 (void);
 *********************************************************************************************************
 */
 //typedef unsigned long long size_t;
-typedef unsigned int uint64_t;
+
 typedef struct sched_param {
     int      sched_priority; /* process execution scheduling priority */
     uint64_t slice;          /* time slice in SCHED_RR mode (ms) */
