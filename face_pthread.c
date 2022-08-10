@@ -1,4 +1,6 @@
 #include <ucos_ii.h>
+#include <face_pthread.h>
+#include <face_errno.h>
 int pthread_create(pthread_t *thread,
        const pthread_attr_t * attr,
        void *(*start_routine)(void*), void * arg){
