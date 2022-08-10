@@ -2028,7 +2028,7 @@ void          OSCtxSw                 (void);
 }
 #endif
 
-#endif
+
 /*
 *********************************************************************************************************
 *                                             pthread.c
@@ -2040,3 +2040,4 @@ typedef struct sched_param {
     int      sched_priority; /* process execution scheduling priority */
     uint64_t slice;          /* time slice in SCHED_RR mode (ms) */
 };
+#endif

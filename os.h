@@ -24,6 +24,10 @@
 */
 
 #include  <ucos_ii.h>
-
+#include <face_pthread.h>
+#include <face_errno.h>
+#include <face_semaphore.h>
+#include <face_signal.h>
+#include <face_time.h>
 
 typedef  INT8U  OS_ERR;

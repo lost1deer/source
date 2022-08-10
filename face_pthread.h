@@ -21,8 +21,8 @@ typedef void * aos_hdl_t;
 typedef aos_hdl_t aos_mutex_t;
 typedef INT32U size_t;
 typedef INT16U pthread_t;
-typedef struct os_event pthread_mutex_t;
-typedef unsigned int pthread_mutexattr_t;
+//typedef struct os_event pthread_mutex_t;
+//typedef unsigned int pthread_mutexattr_t;
 typedef unsigned char uint8_t;
 typedef struct
 {

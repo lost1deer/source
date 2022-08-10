@@ -177,6 +177,13 @@ int aos_mutex_lock(aos_mutex_t *mutex, unsigned int timeout)
     }
     return 0;
 }
+int aos_mutex_unlock(aos_mutex_t *mutex)
+{
+    if (mutex) {
+        pthread_mutex_unlock(*mutex);
+    }
+    return 0;
+}
 int pthread_mutex_lock(pthread_mutex_t *mutex)
 {
     int ret = 0;
