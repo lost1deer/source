@@ -15,15 +15,15 @@ int sem_init(sem_t *sem, int pshared, unsigned int value){
 		errno = ENOSPC;
 		return -1;
 	}
-	/* Sharing between processes is not supported. (×¢£º¸Ã²¿·ÖÔÚFACEÎÄµµÖÐ²¢Î´Ìáµ½)*/
+	/* Sharing between processes is not supported. (æ³¨ï¼šè¯¥éƒ¨åˆ†åœ¨FACEæ–‡æ¡£ä¸­å¹¶æœªæåˆ°)*/
 	if (pshared != 0) {
 		errno = ENOTSUP;
 		return -1;
 	}
-	/*Î´Íê³É£º
-	 *     1. ¸Ã½ø³ÌÈ±ÉÙ³õÊ¼»¯ÐÅºÅÁ¿µÄÊÊµ±È¨ÏÞ¡££¨2022.08.08£©
-	 *     2. ¹ØÓÚpshared±äÁ¿¶ø²úÉúµÄ²Ù×÷£¬Éæ¼°µ½×ÔÐýËø£¨spin locks£©
-	       3. ³õÊ¼»¯ÐÅºÅÁ¿ÒÑ´ïÐÅºÅÁ¿ÏÞÖÆ£¿
+	/*æœªå®Œæˆï¼š
+	 *     1. è¯¥è¿›ç¨‹ç¼ºå°‘åˆå§‹åŒ–ä¿¡å·é‡çš„é€‚å½“æƒé™ã€‚ï¼ˆ2022.08.08ï¼‰
+	 *     2. å…³äºŽpsharedå˜é‡è€Œäº§ç”Ÿçš„æ“ä½œï¼Œæ¶‰åŠåˆ°è‡ªæ—‹é”ï¼ˆspin locksï¼‰
+	       3. åˆå§‹åŒ–ä¿¡å·é‡å·²è¾¾ä¿¡å·é‡é™åˆ¶ï¼Ÿ
 	 */
 	sem->uos_sem = OSSemCreate(value);
 	return 0;

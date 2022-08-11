@@ -6,7 +6,7 @@ int errno = 0;
 
 static long long start_time_ms = 0;
 
-clock_t ms_to_ticks(sys_time_t ms)        /* ´ÓºÁÃëÊ±¼ä×ªÎªÊ±ÖÓ½ÚÅÄ */
+clock_t ms_to_ticks(sys_time_t ms)        /* ä»Žæ¯«ç§’æ—¶é—´è½¬ä¸ºæ—¶é’ŸèŠ‚æ‹ */
 {
 	INT16U padding;
 	clock_t ticks;
@@ -19,7 +19,7 @@ clock_t ms_to_ticks(sys_time_t ms)        /* ´ÓºÁÃëÊ±¼ä×ªÎªÊ±ÖÓ½ÚÅÄ */
 	return ticks;
 }
 
-sys_time_t ticks_to_ms(clock_t ticks)    /* ´ÓÊ±ÖÓ½ÚÅÄ×ªÎªºÁÃëÊ±¼ä */
+sys_time_t ticks_to_ms(clock_t ticks)    /* ä»Žæ—¶é’ŸèŠ‚æ‹è½¬ä¸ºæ¯«ç§’æ—¶é—´ */
 {
 	INT32U padding;
 	sys_time_t time;
@@ -32,12 +32,12 @@ sys_time_t ticks_to_ms(clock_t ticks)    /* ´ÓÊ±ÖÓ½ÚÅÄ×ªÎªºÁÃëÊ±¼ä */
 	return time;
 }
 
-sys_time_t sys_time_get(void)           /* »ñÈ¡ÏµÍ³Ê±¼äµÄºÁÃë±íÊ¾ */
+sys_time_t sys_time_get(void)           /* èŽ·å–ç³»ç»Ÿæ—¶é—´çš„æ¯«ç§’è¡¨ç¤º */
 {
 	return (sys_time_t)(OSTimeGet() * 1000 / OS_TICKS_PER_SEC);
 }
 
-sys_time_t real_time_get(void)          /* »ñÈ¡ÏµÍ³ÊµÊ±Ê±¼ä */
+sys_time_t real_time_get(void)          /* èŽ·å–ç³»ç»Ÿå®žæ—¶æ—¶é—´ */
 {
 	return sys_time_get() + start_time_ms;
 }
@@ -49,12 +49,12 @@ void real_time_set(sys_time_t now_ms) {
 int clock_getres(clockid_t clock_id, struct timespec *res)
 {
 	if (((clock_id != CLOCK_REALTIME) && (clock_id != CLOCK_MONOTONIC)) || (res == NULL)) {
-		errno = EINVAL;    // ²»¶®errnoÊÇÔÚÄÄ¶¨ÒåµÄ£¿
+		errno = EINVAL;    // ä¸æ‡‚errnoæ˜¯åœ¨å“ªå®šä¹‰çš„ï¼Ÿ
 		return -1;
 	}
 
 	res->tv_sec = 0;
-	res->tv_nsec = 1e6;    // ÏµÍ³Ê±ÖÓ·Ö±æÂÊÉèÎªºÁÃë¼¶
+	res->tv_nsec = 1e6;    // ç³»ç»Ÿæ—¶é’Ÿåˆ†è¾¨çŽ‡è®¾ä¸ºæ¯«ç§’çº§
 
 	return 0;
 }
@@ -85,7 +85,7 @@ int clock_gettime(clockid_t clock_id, struct timespec *tp)
 int clock_settime(clockid_t clock_id, const struct timespec *tp)
 {
 	sys_time_t time_ms = 0;
-	/* Ö»ÄÜÉèÖÃÊµÊ±Ê±¼ä */
+	/* åªèƒ½è®¾ç½®å®žæ—¶æ—¶é—´ */
 	if ((clock_id != CLOCK_REALTIME) || (tp == NULL) ||
 		(tp->tv_nsec < 0) || (tp->tv_nsec >= 1000000000UL)) {
 		errno = EINVAL;

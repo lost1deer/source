@@ -1,11 +1,11 @@
-#include<face_time.h>
+ï»¿#include<face_time.h>
 #include<face_signal.h>
 #include<ucos_ii.h>
 int timer_create(clockid_t clockid, struct sigevent * evp, timer_t * timerid){
 	timerid = clockid;
 	if (evp == NULL){
 		evp->sigev_notify = SIGEV_SIGNAL;
-		/*´Ë´¦Òª½«sigev_signo¶¨ÒåÎªÄ¬ÈÏĞÅºÅÊı×Ö£¬ÎÄµµÖĞÔİÊ±Î´ÕÒµ½£¨2022.08.03£©*/
+		/*æ­¤å¤„è¦å°†sigev_signoå®šä¹‰ä¸ºé»˜è®¤ä¿¡å·æ•°å­—ï¼Œæ–‡æ¡£ä¸­æš‚æ—¶æœªæ‰¾åˆ°ï¼ˆ2022.08.03ï¼‰*/
 		evp->sigev_value.sival_int = timerid;
 	}
 
@@ -16,7 +16,7 @@ int timer_delete(timer_t timerid){
 
 }
 
-/*ÕâÀïÔøÉ¾³ırestrict¹Ø¼ü×Ö*/
+/*è¿™é‡Œæ›¾åˆ é™¤restrictå…³é”®å­—*/
 int timer_settime(timer_t timerid, int flags,
 	const struct itimerspec * value,
     struct itimerspec *ovalue){      
