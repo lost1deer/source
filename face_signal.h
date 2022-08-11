@@ -4,7 +4,7 @@
 #include<ucos_ii.h>
 #include<face_pthread.h>
 /*Ϊsigev_notify��ֵ�������·��ų��������ڳ�����ֵĿǰ�����Ӧ���趨Ϊ���٣�2022.08.03)*/
-#define SIGEV_NONE    1u         /*��������¼��������첽֪ͨ*/     
+#define SIGEV_NONE    1u          
 #define SIGEV_SIGNAL  2u         /*Ŀ���¼�����ʱ���ɾ��г�����ֵ���Ŷ��ź�*/
 #define SIGEV_THREAD  3u         /*����֪ͨ����ִ��֪ͨ*/
 

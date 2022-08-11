@@ -1,9 +1,9 @@
+﻿
+#define NULL    ((void *)0)    /*锟斤拷C锟斤拷准锟斤拷锟斤抄锟斤拷锟斤拷锟侥ｏ拷锟斤拷锟斤拷锟斤拷C++*/
 
-#define NULL    ((void *)0)    /*��C��׼���ﳭ�����ģ�������C++*/
 
 
 
-/*���ļ����ڶ�����󷵻�ֵ*/
 #ifndef _SYS_ERRNO_H__
 #define _SYS_ERRNO_H__
 
