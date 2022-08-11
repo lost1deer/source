@@ -76,138 +76,138 @@ int pthread_key_create(pthread_key_t *key, void (*destructor)(void*)){
 
     return 1;
 }
-int pthread_setspecific(pthread_key_t key, const void *value)
-{
-    pthread_key_list_t  *pthread_key_list_s_c = NULL;
-    pthread_key_value_t *key_value_s_o        = NULL;
-    pthread_key_value_t *key_value_s          = NULL;
-    pthread_key_value_t *key_value_s_c        = NULL;
-    pthread_key_value_t *key_value_s_l        = NULL;
-    int list_flag  = 0;
-    int value_flag = 0;
-    pthread_t self = pthread_self();
+// int pthread_setspecific(pthread_key_t key, const void *value)
+// {
+//     pthread_key_list_t  *pthread_key_list_s_c = NULL;
+//     pthread_key_value_t *key_value_s_o        = NULL;
+//     pthread_key_value_t *key_value_s          = NULL;
+//     pthread_key_value_t *key_value_s_c        = NULL;
+//     pthread_key_value_t *key_value_s_l        = NULL;
+//     int list_flag  = 0;
+//     int value_flag = 0;
+//     pthread_t self = pthread_self();
 
-    pthread_mutex_lock(&g_pthread_key_lock);
+//     pthread_mutex_lock(&g_pthread_key_lock);
 
-    /* find the key in list */
-    pthread_key_list_s_c = &pthread_key_list_head;
-    while (pthread_key_list_s_c != NULL) {
-         if (pthread_key_list_s_c->key_num == key){
-            list_flag = 1;
-            key_value_s_o = pthread_key_list_s_c->head.next;
-            break;
-         }
+//     /* find the key in list */
+//     pthread_key_list_s_c = &pthread_key_list_head;
+//     while (pthread_key_list_s_c != NULL) {
+//          if (pthread_key_list_s_c->key_num == key){
+//             list_flag = 1;
+//             key_value_s_o = pthread_key_list_s_c->head.next;
+//             break;
+//          }
 
-         pthread_key_list_s_c = pthread_key_list_s_c->next;
-    }
+//          pthread_key_list_s_c = pthread_key_list_s_c->next;
+//     }
 
-    /* if can not find the key in list, return error */
-    if (list_flag == 0) {
-        pthread_mutex_unlock(&g_pthread_key_lock);
-        return 0;
-    }
+//     /* if can not find the key in list, return error */
+//     if (list_flag == 0) {
+//         pthread_mutex_unlock(&g_pthread_key_lock);
+//         return 0;
+//     }
 
-    /* if no value store in the key, create new pthread_key_value_t to save the value */
-    if (key_value_s_o == NULL) {
-        key_value_s = (pthread_key_value_t *)malloc(sizeof(pthread_key_value_t));
-        if (key_value_s == NULL) {
-            pthread_mutex_unlock(&g_pthread_key_lock);;
-            return 0;
-        }
+//     /* if no value store in the key, create new pthread_key_value_t to save the value */
+//     if (key_value_s_o == NULL) {
+//         key_value_s = (pthread_key_value_t *)malloc(sizeof(pthread_key_value_t));
+//         if (key_value_s == NULL) {
+//             pthread_mutex_unlock(&g_pthread_key_lock);;
+//             return 0;
+//         }
 
-        memset(key_value_s, 0, sizeof(pthread_key_value_t));
+//         memset(key_value_s, 0, sizeof(pthread_key_value_t));
 
-        /* save the thread id and value */
-        key_value_s->key_value.value = (uint32_t*)value;
-        key_value_s->key_value.thread = self;
-        key_value_s->next = NULL;
+//         /* save the thread id and value */
+//         key_value_s->key_value.value = (uint32_t*)value;
+//         key_value_s->key_value.thread = self;
+//         key_value_s->next = NULL;
 
-        /* and pthread_key_value_t to value list */
-        pthread_key_list_s_c->head.next = key_value_s;
-    } else {
-        /* if value store in the key, find the last value and add the new value */
-        /* sreach the value list to find if same thread had save the value */
-        key_value_s_c = key_value_s_o;
-        while (key_value_s_c != NULL) {
-            /* if the same thread had save the value update the value */
-            if (key_value_s_c->key_value.thread == self) {
-                key_value_s_c->key_value.value = (uint32_t*)value;
-                value_flag = 1;
+//         /* and pthread_key_value_t to value list */
+//         pthread_key_list_s_c->head.next = key_value_s;
+//     } else {
+//         /* if value store in the key, find the last value and add the new value */
+//         /* sreach the value list to find if same thread had save the value */
+//         key_value_s_c = key_value_s_o;
+//         while (key_value_s_c != NULL) {
+//             /* if the same thread had save the value update the value */
+//             if (key_value_s_c->key_value.thread == self) {
+//                 key_value_s_c->key_value.value = (uint32_t*)value;
+//                 value_flag = 1;
 
-                break;
-            }
+//                 break;
+//             }
 
-            key_value_s_l = key_value_s_c;
-            key_value_s_c = key_value_s_c->next;
-        }
+//             key_value_s_l = key_value_s_c;
+//             key_value_s_c = key_value_s_c->next;
+//         }
 
-        /* if no same thread had save the value before create new pthread_key_value_t */
-        if (value_flag == 0) {
-            key_value_s = (pthread_key_value_t *)malloc(sizeof(pthread_key_value_t));
-            if (key_value_s == NULL) {
-                pthread_mutex_unlock(&g_pthread_key_lock);;
-                return 0;
-            }
+//         /* if no same thread had save the value before create new pthread_key_value_t */
+//         if (value_flag == 0) {
+//             key_value_s = (pthread_key_value_t *)malloc(sizeof(pthread_key_value_t));
+//             if (key_value_s == NULL) {
+//                 pthread_mutex_unlock(&g_pthread_key_lock);;
+//                 return 0;
+//             }
 
-            memset(key_value_s, 0, sizeof(pthread_key_value_t));
+//             memset(key_value_s, 0, sizeof(pthread_key_value_t));
 
-            /* save current value to pthread_key_value_t */
-            key_value_s->next = key_value_s_l->next;
-            key_value_s->key_value.value = (uint32_t*)value;
-            key_value_s->key_value.thread = self;
+//             /* save current value to pthread_key_value_t */
+//             key_value_s->next = key_value_s_l->next;
+//             key_value_s->key_value.value = (uint32_t*)value;
+//             key_value_s->key_value.thread = self;
 
-            /* add the value to the list */
-            key_value_s_l->next = key_value_s;
-        }
-    }
+//             /* add the value to the list */
+//             key_value_s_l->next = key_value_s;
+//         }
+//     }
 
-    pthread_mutex_unlock(&g_pthread_key_lock);
+//     pthread_mutex_unlock(&g_pthread_key_lock);
 
-    return 0;
-}
+//     return 0;
+// }
 
-void *pthread_getspecific(pthread_key_t key)
-{
-    pthread_key_list_t  *pthread_key_list_s_c = NULL;
-    pthread_key_value_t *key_value_s_o        = NULL;
-    pthread_key_value_t *key_value_s_c        = NULL;
-    int list_flag = 0;
+// void *pthread_getspecific(pthread_key_t key)
+// {
+//     pthread_key_list_t  *pthread_key_list_s_c = NULL;
+//     pthread_key_value_t *key_value_s_o        = NULL;
+//     pthread_key_value_t *key_value_s_c        = NULL;
+//     int list_flag = 0;
 
-    pthread_mutex_lock(&g_pthread_key_lock);
+//     pthread_mutex_lock(&g_pthread_key_lock);
 
-    /* find the key in list */
-    pthread_key_list_s_c = &pthread_key_list_head;
-    while (pthread_key_list_s_c != NULL) {
-         if (pthread_key_list_s_c->key_num == key){
-            list_flag = 1;
-            key_value_s_o = pthread_key_list_s_c->head.next;
-            break;
-         }
+//     /* find the key in list */
+//     pthread_key_list_s_c = &pthread_key_list_head;
+//     while (pthread_key_list_s_c != NULL) {
+//          if (pthread_key_list_s_c->key_num == key){
+//             list_flag = 1;
+//             key_value_s_o = pthread_key_list_s_c->head.next;
+//             break;
+//          }
 
-         pthread_key_list_s_c = pthread_key_list_s_c->next;
-    }
+//          pthread_key_list_s_c = pthread_key_list_s_c->next;
+//     }
 
-    /* if can not find the key in list, or no value store in the key, return NULL */
-    if ((list_flag == 0) || (key_value_s_o == NULL)) {
-        pthread_mutex_unlock(&g_pthread_key_lock);
-        return NULL;
-    }
+//     /* if can not find the key in list, or no value store in the key, return NULL */
+//     if ((list_flag == 0) || (key_value_s_o == NULL)) {
+//         pthread_mutex_unlock(&g_pthread_key_lock);
+//         return NULL;
+//     }
 
-    /* search the value list to find the value current thread saved */
-    key_value_s_c = key_value_s_o;
-    while (key_value_s_c != NULL) {
-        if (key_value_s_c->key_value.thread == pthread_self()) {
-            pthread_mutex_unlock(&g_pthread_key_lock);
-            return (void *)key_value_s_c->key_value.value;
-        }
+//     /* search the value list to find the value current thread saved */
+//     key_value_s_c = key_value_s_o;
+//     while (key_value_s_c != NULL) {
+//         if (key_value_s_c->key_value.thread == pthread_self()) {
+//             pthread_mutex_unlock(&g_pthread_key_lock);
+//             return (void *)key_value_s_c->key_value.value;
+//         }
 
-        key_value_s_c = key_value_s_c->next;
-    }
+//         key_value_s_c = key_value_s_c->next;
+//     }
 
-    /* if can not find the value current thread saved return NULL */
-    pthread_mutex_unlock(&g_pthread_key_lock);
-    return NULL;
-}
+//     /* if can not find the value current thread saved return NULL */
+//     pthread_mutex_unlock(&g_pthread_key_lock);
+//     return NULL;
+// }
 
 int pthread_key_delete(pthread_key_t key)
 {
