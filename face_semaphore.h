@@ -2,11 +2,11 @@
 #define   FACE_SEMAPHORE_H
 #include <ucos_ii.h>
 #include <face_time.h>
-#define SEM_NSEMS_MAX   32767      /*�ź����������ƣ������ݶ�*/
-#define SEM_VALUE_MAX   INT_MAX  /*�ź���ֵ������*/
+#define SEM_NSEMS_MAX   32767      
+#define SEM_VALUE_MAX   INT_MAX  
 #define SEM_FAILED ((sem_t *)0)
 
-/*sem_tӦ�����ļ�������ʵ�֣�*/
+
 
 typedef struct {
 	void *uos_sem;
