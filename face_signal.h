@@ -1,13 +1,16 @@
+#ifndef   FACE_SIGNAL_H
+#define   FACE_SIGNAL_H
 #include<signal.h>
 #include<ucos_ii.h>
-/*Îªsigev_notifyµÄÖµ¶¨ÒåÒÔÏÂ·ûºÅ³£Á¿£¬¶ÔÓÚ³£Á¿µÄÖµÄ¿Ç°²»Çå³þÓ¦¸ÃÉè¶¨Îª¶àÉÙ£¨2022.08.03)*/
-#define SIGEV_NONE    1u         /*·¢ÉúÏà¹ØÊÂ¼þ²»´«µÝÒì²½Í¨Öª*/     
-#define SIGEV_SIGNAL  2u         /*Ä¿±êÊÂ¼þ·¢ÉúÊ±Éú³É¾ßÓÐ³ÌÐò¶¨ÒåÖµµÄÅÅ¶ÓÐÅºÅ*/
-#define SIGEV_THREAD  3u         /*µ÷ÓÃÍ¨Öªº¯ÊýÖ´ÐÐÍ¨Öª*/
+#include<face_pthread.h>
+/*Îªsigev_notifyï¿½ï¿½Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½Å³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú³ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÄ¿Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½è¶¨Îªï¿½ï¿½ï¿½Ù£ï¿½2022.08.03)*/
+#define SIGEV_NONE    1u         /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ì²½Í¨Öª*/     
+#define SIGEV_SIGNAL  2u         /*Ä¿ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½ï¿½ï¿½Å¶ï¿½ï¿½Åºï¿½*/
+#define SIGEV_THREAD  3u         /*ï¿½ï¿½ï¿½ï¿½Í¨Öªï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½Í¨Öª*/
 
 union sigval{
-	int sival_int;            /*ÕûÊýÐÍÐÅºÅÁ¿*/
-	void *sival_ptr;          /*Ö¸ÕëÐÍÐÅºÅÁ¿*/
+	int sival_int;            /*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½*/
+	void *sival_ptr;          /*Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ï¿½ï¿½*/
 };
 
 struct sigevent
@@ -18,3 +21,5 @@ struct sigevent
 	void (*sigev_notify_function)(union sigval);
 	pthread_attr_t *sigev_notify_attributes;
 };
+
+#endif

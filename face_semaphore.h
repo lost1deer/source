@@ -1,8 +1,12 @@
-#define SEM_NSEMS_MAX   32767      /*信号量数量限制，数量暂定*/
-#define SEM_VALUE_MAX   INT_MAX  /*信号量值的限制*/
+#ifndef   FACE_SEMAPHORE_H
+#define   FACE_SEMAPHORE_H
+#include <ucos_ii.h>
+#include <face_time.h>
+#define SEM_NSEMS_MAX   32767      /*锟脚猴拷锟斤拷锟斤拷锟斤拷锟斤拷锟狡ｏ拷锟斤拷锟斤拷锟捷讹拷*/
+#define SEM_VALUE_MAX   INT_MAX  /*锟脚猴拷锟斤拷值锟斤拷锟斤拷锟斤拷*/
 #define SEM_FAILED ((sem_t *)0)
 
-/*sem_t应该由文件描述符实现？*/
+/*sem_t应锟斤拷锟斤拷锟侥硷拷锟斤拷锟斤拷锟斤拷实锟街ｏ拷*/
 
 typedef struct {
 	void *uos_sem;
@@ -18,3 +22,5 @@ int    sem_wait(sem_t *sem);
 int    sem_getvalue(sem_t *sem, int *sval);
 int    sem_close(sem_t *sem);
 int    sem_destroy(sem_t *sem);
+
+#endif

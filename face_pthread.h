@@ -1,3 +1,5 @@
+#ifndef   FACE_PTHREAD_H
+#define   FACE_PTHREAD_H
 #include<ucos_ii.h>
 #define PTHREAD_DEFAULT_STACK_SIZE 2048
 #define PTHREAD_DEFAULT_GUARD_SIZE 256
@@ -77,3 +79,5 @@ int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize);
 int pthread_attr_getguardsize(const pthread_attr_t *attr, size_t *guardsize);
 int pthread_attr_setscope(pthread_attr_t *attr, int contentionscope);
 int pthread_attr_getscope(const pthread_attr_t *attr, int *contentionscope);
+
+#endif

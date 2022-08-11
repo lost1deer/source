@@ -1,8 +1,9 @@
-#define NULL    ((void *)0)    /*´ÓC±ê×¼¿âÀï³­³öÀ´µÄ£¬²»¼æÈÝC++*/
+
+#define NULL    ((void *)0)    /*ï¿½ï¿½Cï¿½ï¿½×¼ï¿½ï¿½ï¿½ï³­ï¿½ï¿½ï¿½ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½C++*/
 
 
 
-/*±¾ÎÄ¼þÓÃÓÚ¶¨Òå´íÎó·µ»ØÖµ*/
+/*ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½ó·µ»ï¿½Öµ*/
 #ifndef _SYS_ERRNO_H__
 #define _SYS_ERRNO_H__
 
@@ -156,4 +157,4 @@
 #define ENSRQUERYDOMAINTOOLONG  176 /* Domain name is too long */
 #define ENSRCNAMELOOP           177 /* Domain name is too long */
 
-#endif /* _SYS_ERROR_H */
+#endif 
