@@ -10,10 +10,12 @@
 
 typedef struct {
 	void *uos_sem;
+	char *sem_name;
 } sem_t;
 
 int    sem_init(sem_t *sem, int pshared, unsigned int value);
-sem_t *sem_open(const char *name, int oflag, ...);
+//sem_t *sem_open(const char *name, int oflag);
+sem_t *sem_open(const char *name, int oflag, unsigned int value);
 int    sem_post(sem_t *sem);
 int    sem_timedwait(sem_t *sem, const struct timespec *abs_timeout);
 int    sem_trywait(sem_t *sem);

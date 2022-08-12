@@ -30,8 +30,20 @@ int sem_init(sem_t *sem, int pshared, unsigned int value){
 	return 0;
 }
 
-sem_t *sem_open(const char *name, int oflag, ...){
+sem_t *sem_open(const char *name, int oflag, unsigned int value){
+	sem_t *new_sem;
+	if (strlen(name) <= 0) {
+		errno = ENOENT;
+		return -1;
+	}
 
+	if (strlen(name) > SEM_NAME_MAX) {
+		errno = ENAMETOOLONG;
+		return -1;
+	}
+	new_sem->sem_name = name;
+	new_sem->uos_sem = OSSemCreate(value);
+	return 0;
 }
 
 int sem_post(sem_t *sem){
@@ -135,17 +147,23 @@ int sem_unlink(const char *name){
 
 
 int sem_getvalue(sem_t *sem, int *sval){
-	if ((sem == NULL) || (sval == NULL)) {
+	OS_SEM_DATA *data;
+	int perr;
+	if (sem == NULL) {
 		errno = EINVAL;
 		return -1;
 	}
-
-
+	perr = OSSemQuery(sem->uos_sem, data);
+	sval = data->OSCnt;
+	return 0;
 }
 
 
 int sem_close(sem_t *sem){
-
+	if (sem == NULL) {
+		errno = EINVAL;
+		return -1;
+	}
 }
 
 
