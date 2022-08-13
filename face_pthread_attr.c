@@ -1,4 +1,4 @@
-#include <ucos_ii.h>
+﻿#include <ucos_ii.h>
 #include <face_pthread.h>
 static  CPU_STK  AppTaskStartStk[APP_TASK_START_STK_SIZE];
 typedef INT32U size_t;

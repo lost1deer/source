@@ -1,4 +1,4 @@
-#ifndef   FACE_SEMAPHORE_H
+﻿#ifndef   FACE_SEMAPHORE_H
 #define   FACE_SEMAPHORE_H
 #include <ucos_ii.h>
 #include <face_time.h>

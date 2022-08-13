@@ -1,25 +1,24 @@
-#ifndef   FACE_TIME_H
+ï»¿#ifndef   FACE_TIME_H
 #define   FACE_TIME_H
-#define CLOCK_REALTIME           0    /* ÏµÍ³ÊµÊ±Ê±¼ä,ËæÏµÍ³ÊµÊ±Ê±¼ä¸Ä±ä¶ø¸Ä±ä,¼´´ÓUTC1970-1-1 0:0:0¿ªÊ¼¼ÆÊ±,ÖĞ¼äÊ±¿ÌÈç¹ûÏµÍ³Ê±¼ä±»ÓÃ»§¸Ä³ÉÆäËû,Ôò¶ÔÓ¦µÄÊ±¼äÏàÓ¦¸Ä±ä. */
-#define CLOCK_MONOTONIC          1    /* ´ÓÏµÍ³Æô¶¯ÕâÒ»¿ÌÆğ¿ªÊ¼¼ÆÊ±,²»ÊÜÏµÍ³Ê±¼ä±»ÓÃ»§¸Ä±äµÄÓ°Ïì */
-#define CLOCK_PROCESS_CPUTIME_ID 2    /* ±¾½ø³Ìµ½µ±Ç°´úÂëÏµÍ³CPU»¨·ÑµÄÊ±¼ä¡£ĞèÒª×¢ÒâÊÇ²»ÊÇ½ø³Ì¿ªÊ¼µ½µ±Ç°´úÂëµÄÊ±¼ä. */
-#define CLOCK_THREAD_CPUTIME_ID  3    /* ±¾Ïß³Ìµ½µ±Ç°´úÂëÏµÍ³CPU»¨·ÑµÄÊ±¼ä¡£ĞèÒª×¢ÒâÊÇ²»ÊÇÏß³Ì¿ªÊ¼µ½µ±Ç°´úÂëµÄÊ±¼ä. */
+#define CLOCK_REALTIME           0    /* ç³»ç»Ÿå®æ—¶æ—¶é—´,éšç³»ç»Ÿå®æ—¶æ—¶é—´æ”¹å˜è€Œæ”¹å˜,å³ä»UTC1970-1-1 0:0:0å¼€å§‹è®¡æ—¶,ä¸­é—´æ—¶åˆ»å¦‚æœç³»ç»Ÿæ—¶é—´è¢«ç”¨æˆ·æ”¹æˆå…¶ä»–,åˆ™å¯¹åº”çš„æ—¶é—´ç›¸åº”æ”¹å˜. */
+#define CLOCK_MONOTONIC          1    /* ä»ç³»ç»Ÿå¯åŠ¨è¿™ä¸€åˆ»èµ·å¼€å§‹è®¡æ—¶,ä¸å—ç³»ç»Ÿæ—¶é—´è¢«ç”¨æˆ·æ”¹å˜çš„å½±å“ */
+#define CLOCK_PROCESS_CPUTIME_ID 2    /* æœ¬è¿›ç¨‹åˆ°å½“å‰ä»£ç ç³»ç»ŸCPUèŠ±è´¹çš„æ—¶é—´ã€‚éœ€è¦æ³¨æ„æ˜¯ä¸æ˜¯è¿›ç¨‹å¼€å§‹åˆ°å½“å‰ä»£ç çš„æ—¶é—´. */
+#define CLOCK_THREAD_CPUTIME_ID  3    /* æœ¬çº¿ç¨‹åˆ°å½“å‰ä»£ç ç³»ç»ŸCPUèŠ±è´¹çš„æ—¶é—´ã€‚éœ€è¦æ³¨æ„æ˜¯ä¸æ˜¯çº¿ç¨‹å¼€å§‹åˆ°å½“å‰ä»£ç çš„æ—¶é—´. */
 
 #include<os_cpu.h>
-#include<time.h>
 #include<face_signal.h>
-typedef INT8U clockid_t;    /* Ê±ÖÓ±êÊ¶              */
-typedef INT32U clock_t;     /* Ê±ÖÓÌøÊıÀàĞÍ          */
+typedef INT8U clockid_t;    /* æ—¶é’Ÿæ ‡è¯†              */
+typedef INT32U clock_t;     /* æ—¶é’Ÿè·³æ•°ç±»å‹          */
 #ifndef _TIME_T_DEFINED
-typedef INT32U time_t;      /* ÃëÎªµ¥Î»µÄÊ±¼ä        */
+typedef INT32U time_t;      /* ç§’ä¸ºå•ä½çš„æ—¶é—´        */
 #endif
-typedef long long sys_time_t;  /* ºÁÃëÎªµ¥Î»µÄÊ±¼ä      */
-typedef INT32U timer_t;     /* ÓÃÀ´´æ´¢¼ÆÊ±Æ÷ID      */
+typedef long long sys_time_t;  /* æ¯«ç§’ä¸ºå•ä½çš„æ—¶é—´      */
+typedef INT32U timer_t;     /* ç”¨æ¥å­˜å‚¨è®¡æ—¶å™¨ID      */
 
 
 struct timespec {
-	time_t  tv_sec;         /* Ê±¼äµÄÃëÊı            */		
-	long    tv_nsec;        /* Ê±¼äµÄÄÉÃëÊı          */
+	time_t  tv_sec;         /* æ—¶é—´çš„ç§’æ•°            */		
+	long    tv_nsec;        /* æ—¶é—´çš„çº³ç§’æ•°          */
 };
 
 #ifndef _TM_DEFINED
@@ -50,12 +49,12 @@ int clock_nanosleep(clockid_t, int, const struct timespec *, struct timespec *);
 int nanosleep(const struct timespec *, struct timespec *);
 unsigned int sleep(unsigned int seconds);
 
-/*---¼ÆÊ±Æ÷---*/
+/*---è®¡æ—¶å™¨---*/
 int timer_create(clockid_t clockid, struct sigevent *evp, timer_t * timerid);
 int timer_delete(timer_t timerid);
 int timer_settime(timer_t timerid, int flags,
 	const struct itimerspec *value,
-struct itimerspec *ovalue);  /*ÕâÀïÔøÉ¾³ırestrict¹Ø¼ü×Ö£¨2022.08.02£©*/
+struct itimerspec *ovalue);  /*è¿™é‡Œæ›¾åˆ é™¤restrictå…³é”®å­—ï¼ˆ2022.08.02ï¼‰*/
 int timer_gettime(timer_t timerid, struct itimerspec *value);
 int timer_getoverrun(timer_t timerid);
 
