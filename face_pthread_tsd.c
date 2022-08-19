@@ -1,4 +1,4 @@
-#include <ucos_ii.h>
+﻿#include <ucos_ii.h>
 #include <face_pthread.h>
 typedef unsigned int pthread_key_t;
 typedef unsigned int uint32_t;

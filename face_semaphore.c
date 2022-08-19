@@ -30,8 +30,10 @@ int sem_init(sem_t *sem, int pshared, unsigned int value){
 	return 0;
 }
 
-sem_t *sem_open(const char *name, int oflag, unsigned int value){
+sem_t *sem_open(const char *name, int oflag, mode_t mode,int value){
 	sem_t *new_sem;
+	INT8U *perr = NULL;
+	int *pname=*name;
 	if (strlen(name) <= 0) {
 		errno = ENOENT;
 		return -1;
@@ -41,9 +43,12 @@ sem_t *sem_open(const char *name, int oflag, unsigned int value){
 		errno = ENAMETOOLONG;
 		return -1;
 	}
-	new_sem->sem_name = name;
-	new_sem->uos_sem = OSSemCreate(value);
-	return 0;
+	if (oflag = O_CREAT)
+	{
+		new_sem->uos_sem = OSSemCreate(value);
+		OSEventNameSet(new_sem->uos_sem, pname, perr);
+	}
+	return new_sem;
 }
 
 int sem_post(sem_t *sem){
@@ -57,14 +62,14 @@ int sem_post(sem_t *sem){
 
 /*请求信号量，如果信号量为0则保持等待*/
 /*疑问：怎么检测死锁？（may be）*/
-/*参数2为该函数在获取不到信号时的阻塞超时时间，单位为systick，暂定为0 */
+/*参数2为该函数在获取不到信号时的阻塞超时时间，单位为systick，暂定为1000 */
 int sem_wait(sem_t *sem){
 	INT8U *perr = NULL;
 	if (sem == NULL) {
 		errno = EINVAL;
 		return -1;
 	}
-	OSSemPend((sem->uos_sem), 0, perr);
+	OSSemPend((sem->uos_sem), 1000, perr);
 	return 0;
 }
 
@@ -140,6 +145,10 @@ int sem_unlink(const char *name){
 		errno = ENAMETOOLONG;
 		return -1;
 	}
+	for (int i = 0; i < OS_EVENT_TBL_SIZE; i++){
+		if (*name == OSEventTbl->OSEventName);
+		/*此处存疑*/
+	}
 
 	errno = ENOSYS;
 	return -1;
@@ -160,10 +169,13 @@ int sem_getvalue(sem_t *sem, int *sval){
 
 
 int sem_close(sem_t *sem){
+	INT8U *perr = NULL;
 	if (sem == NULL) {
 		errno = EINVAL;
 		return -1;
 	}
+	OSSemDel(sem->uos_sem, OS_DEL_ALWAYS, perr);
+	return 0;
 }
 
 
