@@ -58,4 +58,6 @@ struct itimerspec *ovalue);  /*这里曾删除restrict关键字（2022.08.02）*
 int timer_gettime(timer_t timerid, struct itimerspec *value);
 int timer_getoverrun(timer_t timerid);
 
+
+INT32U timespce2ticks(const struct timespec*);
 #endif

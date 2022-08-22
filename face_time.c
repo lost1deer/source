@@ -122,3 +122,8 @@ unsigned int sleep(unsigned int seconds)
 {
 	return OSTimeDlyHMSM(0, 0, seconds, 0);
 }
+
+INT32U timespce2ticks(const struct timespec *time_) {
+	sys_time_t time_ms = (time_->tv_sec * 1000) + (time_->tv_nsec / 1000000);
+	return (INT32U) ms_to_ticks(time_ms);
+}
