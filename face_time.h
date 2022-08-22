@@ -15,6 +15,13 @@ typedef INT32U time_t;      /* 秒为单位的时间        */
 typedef long long sys_time_t;  /* 毫秒为单位的时间      */
 typedef INT32U timer_t;     /* 用来存储计时器ID      */
 
+/*时钟列表*/
+typedef struct timer_list_s {
+	timer_t   id;
+	void * uos_timer;
+	void *evp;  /* The sigevent as the parameter of timer_callback. */
+	struct timer_list_s *next;
+} timer_list_t;
 
 struct timespec {
 	time_t  tv_sec;         /* 时间的秒数            */		
