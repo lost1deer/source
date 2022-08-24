@@ -5,6 +5,10 @@
 #define CLOCK_PROCESS_CPUTIME_ID 2    /* 本进程到当前代码系统CPU花费的时间。需要注意是不是进程开始到当前代码的时间. */
 #define CLOCK_THREAD_CPUTIME_ID  3    /* 本线程到当前代码系统CPU花费的时间。需要注意是不是线程开始到当前代码的时间. */
 
+#ifndef TIMER_ABSTIME
+#define TIMER_ABSTIME   1
+#endif
+
 #include<os_cpu.h>
 #include<face_signal.h>
 typedef INT8U clockid_t;    /* 时钟标识              */
@@ -18,7 +22,7 @@ typedef INT32U timer_t;     /* 用来存储计时器ID      */
 /*时钟列表*/
 typedef struct timer_list_s {
 	timer_t   id;
-	void * uos_timer;
+	OS_TMR *uos_timer;
 	void *evp;  /* The sigevent as the parameter of timer_callback. */
 	struct timer_list_s *next;
 } timer_list_t;
@@ -57,6 +61,9 @@ int nanosleep(const struct timespec *, struct timespec *);
 unsigned int sleep(unsigned int seconds);
 
 /*---计时器---*/
+static void timer_callback(void *timer, void *arg);
+static int64_t timespec_to_nanosecond(struct timespec *t);
+static struct timespec nanosecond_to_timespec(int64_t ns);
 int timer_create(clockid_t clockid, struct sigevent *evp, timer_t * timerid);
 int timer_delete(timer_t timerid);
 int timer_settime(timer_t timerid, int flags,
