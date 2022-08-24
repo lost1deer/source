@@ -43,9 +43,11 @@ int     mq_getattr(mqd_t mqdes, struct mq_attr *mqstat) {
 
 ssize_t mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len, unsigned *msg_prio, const struct timespec *abs_timeout) {
 	INT8U err = 0;
-	msg_ptr = (char*) OSQPend((OS_EVENT*)mqdes, timespce2ticks(abs_timeout), &err);
+	char* s = (char*)OSQPend((OS_EVENT*)mqdes, 0, &err);
+	msg_len = OS_StrLen(s);
+	OS_MemCopy(msg_ptr, s, msg_len + 1);
 	if (err != OS_ERR_NONE) return 0;
-	return sizeof(msg_ptr);
+	return msg_len;
 }
 
 int     mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len, unsigned msg_prio, const struct timespec *abs_timeout) {
