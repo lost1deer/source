@@ -23,6 +23,7 @@ typedef void * aos_hdl_t;
 typedef aos_hdl_t aos_mutex_t;
 typedef INT32U size_t;
 typedef INT16U pthread_t;
+typedef int pthread_once_t;
 //typedef struct os_event pthread_mutex_t;
 //typedef unsigned int pthread_mutexattr_t;
 typedef unsigned char uint8_t;
@@ -58,7 +59,37 @@ int pthread_create(pthread_t * thread,
       const pthread_attr_t * attr,
       void *(*start_routine)(void*), void * arg);
 
+typedef struct pthread_cleanup {
+    int cancel_type;
+    struct pthread_cleanup *prev;
+    void (*cleanup_routine)(void *para);
+    void *para;
+} pthread_cleanup_t;
 
+typedef struct pthread_tcb {
+    void *task;    /* The rhino task handle. */
+    unsigned int magic; /* The pthread tcb memory magic number. */
+    void *(*thread_entry)(void *para); /* The start routine of the thread. */
+    void *thread_para;   /* The parameter of start routine. */
+    void *join_sem;  /* The semaphore for pthread_join. */
+    pthread_cleanup_t *cleanup; /* The registered cleanup function for the thread.*/
+    void *environ;
+    void **tls;
+    void  *return_value; /* The thread's return value. */
+    pthread_attr_t  attr; /* The thread's attribute. */
+    char thread_name[PTHREAD_NAME_MAX_LEN + 1];  /* The thread's name. */
+} pthread_tcb_t;
+
+static inline pthread_tcb_t* __pthread_get_tcb(pthread_t thread)
+{
+    pthread_tcb_t* ptcb = (pthread_tcb_t*)thread;
+
+    if ((ptcb == NULL) || (ptcb->magic != PTHREAD_TCB_MAGIC)) {
+        return NULL;
+    }
+
+    return ptcb;
+}
 int pthread_attr_init(pthread_attr_t *attr);
 int pthread_attr_destroy(pthread_attr_t *attr);
 int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate);
