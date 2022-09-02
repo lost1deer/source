@@ -1,8 +1,8 @@
 ﻿#define N_MESSAGES 128
 
-#include<ucos_ii.h>
-#include<face_mqueue.h>
-#include<face_time.h>
+#include "ucos_ii.h"
+#include "face_mqueue.h"
+#include "face_time.h"
 
 mqd_t   mq_open(const char *name, int oflag, ...) {
 	void* MsgGrp[N_MESSAGES];
