@@ -162,15 +162,13 @@ int pthread_getname_np(pthread_t thread, char *name, size_t len)
 
 int pthread_getconcurrency(void)
 {
-    /* User thread and kernel thread are one-to-one correspondence in AliOS Things,
-       so the concurrency is 0  */
+    
     return 0;
 }
 
 int pthread_setconcurrency(int new_level)
 {
-    /* User thread and kernel thread are one-to-one correspondence in AliOS Things,
-       so the concurrency can not be set  */
+    
     return ENOSYS;
 }
 int pthread_equal(pthread_t t1, pthread_t t2)
@@ -201,3 +199,4 @@ int pthread_kill(pthread_t thread, int sig)
 {
     return ENOSYS;
 }
+

@@ -1,6 +1,7 @@
+#include <ucos_ii.h>
+#include <face_time.h>
 #ifndef   FACE_PTHREAD_H
 #define   FACE_PTHREAD_H
-#include<ucos_ii.h>
 #define PTHREAD_DEFAULT_STACK_SIZE 2048
 #define PTHREAD_DEFAULT_GUARD_SIZE 256
 #define PTHREAD_DEFAULT_PRIORITY   30
@@ -17,10 +18,10 @@
 #define DEFAULT_COND_CLOCK  CLOCK_REALTIME
 #define DEFAULT_COND_SHARED PTHREAD_PROCESS_PRIVATE
 /* Defined for API with delay time */
-#define AOS_WAIT_FOREVER 0xffffffffu /**< 阻塞性等待，即一直等待，直到事件发生或资源获得才返回 */
-#define AOS_NO_WAIT      0x0         /**< 非阻塞性等待，即若无事件发生或无资源可获得，则返回 */
-typedef void * aos_hdl_t;
-typedef aos_hdl_t aos_mutex_t;
+#define uos_WAIT_FOREVER 0xffffffffu /**< 阻塞性等待，即一直等待，直到事件发生或资源获得才返回 */
+#define uos_NO_WAIT      0x0         /**< 非阻塞性等待，即若无事件发生或无资源可获得，则返回 */
+typedef void * uos_hdl_t;
+typedef uos_hdl_t uos_mutex_t;
 typedef INT32U size_t;
 typedef INT16U pthread_t;
 typedef int pthread_once_t;
@@ -80,16 +81,25 @@ typedef struct pthread_tcb {
     char thread_name[PTHREAD_NAME_MAX_LEN + 1];  /* The thread's name. */
 } pthread_tcb_t;
 
-static inline pthread_tcb_t* __pthread_get_tcb(pthread_t thread)
-{
-    pthread_tcb_t* ptcb = (pthread_tcb_t*)thread;
+//static inline pthread_tcb_t* __pthread_get_tcb(pthread_t thread);
+int       pthread_create(pthread_t *thread, const pthread_attr_t *attr,
+                         void *(*start_routine)(void *), void *arg);
+int       pthread_detach(pthread_t thread);
+int       pthread_cancel(pthread_t thread);
+void      pthread_testcancel(void);
+int       pthread_setcancelstate(int state, int *oldstate);
+int       pthread_setcanceltype(int type, int *oldtype);
+int       pthread_kill(pthread_t thread, int sig);
+int       pthread_equal(pthread_t t1, pthread_t t2);
+void      pthread_cleanup_pop(int execute);
+void      pthread_cleanup_push(void (*routine)(void *), void *arg);
+int       pthread_once(pthread_once_t *once_control, void (*init_routine)(void));
+int       pthread_getcpuclockid(pthread_t thread_id, clockid_t *clock_id);
+int       pthread_setconcurrency(int new_level);
+int       pthread_getconcurrency(void);
+int       pthread_setname_np(pthread_t thread, const char *name);
+int       pthread_getname_np(pthread_t thread, char *name, size_t len);
 
-    if ((ptcb == NULL) || (ptcb->magic != PTHREAD_TCB_MAGIC)) {
-        return NULL;
-    }
-
-    return ptcb;
-}
 int pthread_attr_init(pthread_attr_t *attr);
 int pthread_attr_destroy(pthread_attr_t *attr);
 int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate);

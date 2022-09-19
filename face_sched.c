@@ -10,7 +10,7 @@
 
 int errno;    /* should have been imported from errno.h */
 
-static inline pthread_t _pid_to_pthread(pid_t pid)
+static pthread_t _pid_to_pthread(pid_t pid)
 {
 	if (pid == -1) {
 		return NULL;
@@ -21,7 +21,7 @@ static inline pthread_t _pid_to_pthread(pid_t pid)
 }
 
 /* Convert pid to ptcb of the thread. */
-static inline pthread_tcb_t* sched_get_ptcb(pid_t pid)
+static pthread_tcb_t* sched_get_ptcb(pid_t pid)
 {
 	pthread_t thread = 0;
 
@@ -33,11 +33,11 @@ static inline pthread_tcb_t* sched_get_ptcb(pid_t pid)
 	return __pthread_get_tcb(thread);
 }
 
-static inline get_priority_min(INT32U policy) {
+static get_priority_min(INT32U policy) {
 	return MIN_PRIO;
 }
 
-static inline get_priority_max(INT32U policy) {
+static get_priority_max(INT32U policy) {
 	return MAX_PRIO;
 }
 

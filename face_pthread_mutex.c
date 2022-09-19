@@ -170,14 +170,14 @@ int pthread_mutexattr_setpshared(pthread_mutexattr_t *attr, int pshared)
 
     return 0;
 }
-int aos_mutex_lock(aos_mutex_t *mutex, unsigned int timeout)
+int uos_mutex_lock(uos_mutex_t *mutex, unsigned int timeout)
 {
     if (mutex) {
         pthread_mutex_lock(*mutex);
     }
     return 0;
 }
-int aos_mutex_unlock(aos_mutex_t *mutex)
+int uos_mutex_unlock(uos_mutex_t *mutex)
 {
     if (mutex) {
         pthread_mutex_unlock(*mutex);
@@ -200,7 +200,7 @@ int pthread_mutex_lock(pthread_mutex_t *mutex)
         }
     }
 
-    ret = aos_mutex_lock((aos_mutex_t*)(&(mutex->mutex)), AOS_WAIT_FOREVER);
+    ret = uos_mutex_lock((uos_mutex_t*)(&(mutex->mutex)), uos_WAIT_FOREVER);
     if (ret != 0) {
         return -1;
     }
@@ -219,7 +219,7 @@ int pthread_mutex_unlock(pthread_mutex_t *mutex)
         return -1;
     }
 
-    ret = aos_mutex_unlock((aos_mutex_t*)(&(mutex->mutex)));
+    ret = uos_mutex_unlock((uos_mutex_t*)(&(mutex->mutex)));
     if (ret != 0) {
         return -1;
     }
@@ -242,7 +242,7 @@ int pthread_mutex_trylock(pthread_mutex_t *mutex)
         }
     }
 
-    ret = aos_mutex_lock((aos_mutex_t*)(&(mutex->mutex)), AOS_NO_WAIT);
+    ret = uos_mutex_lock((uos_mutex_t*)(&(mutex->mutex)), uos_NO_WAIT);
     if (ret == -ETIMEDOUT) {
         return EBUSY;
     } else if (ret != 0) {
@@ -274,7 +274,7 @@ int pthread_mutex_timedlock(pthread_mutex_t *mutex, const struct timespec *at)
     }
 
     unsigned int timeout = at->tv_sec * 1000 +  at->tv_nsec / 1000;
-    ret = aos_mutex_lock((aos_mutex_t*)(&(mutex->mutex)), timeout);
+    ret = uos_mutex_lock((uos_mutex_t*)(&(mutex->mutex)), timeout);
     if (ret != 0) {
         return -1;
     }

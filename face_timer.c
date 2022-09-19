@@ -240,7 +240,7 @@ int timer_settime(timer_t timerid, int flags,
 	}
 
 	OSTmrStop(&(timer_list->uos_timer), OS_TMR_OPT_NONE, callback_arg, &perr);
-	/* aos_timer_change? */
+	/* uos_timer_change? */
 	OSTmrStart(&(timer_list->uos_timer), &perr);
 
 	pthread_mutex_unlock(&g_timer_lock);
