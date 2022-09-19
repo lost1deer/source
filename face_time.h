@@ -1,5 +1,5 @@
-﻿#ifndef   FACE_TIME_H
-#define   FACE_TIME_H
+﻿#ifndef   _FACE_TIME_H
+#define   _FACE_TIME_H
 #define CLOCK_REALTIME           0    /* 系统实时时间,随系统实时时间改变而改变,即从UTC1970-1-1 0:0:0开始计时,中间时刻如果系统时间被用户改成其他,则对应的时间相应改变. */
 #define CLOCK_MONOTONIC          1    /* 从系统启动这一刻起开始计时,不受系统时间被用户改变的影响 */
 #define CLOCK_PROCESS_CPUTIME_ID 2    /* 本进程到当前代码系统CPU花费的时间。需要注意是不是进程开始到当前代码的时间. */
@@ -9,8 +9,8 @@
 #define TIMER_ABSTIME   1
 #endif
 
-#include<os_cpu.h>
-#include<face_signal.h>
+#include "os_cpu.h"
+#include "face_signal.h"
 typedef INT8U clockid_t;    /* 时钟标识              */
 typedef INT32U clock_t;     /* 时钟跳数类型          */
 #ifndef _TIME_T_DEFINED

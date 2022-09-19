@@ -1,7 +1,7 @@
-﻿#ifndef FACE_MQUEUE_H
-#define FACE_MQUEUE_H
+﻿#ifndef _FACE_MQUEUE_H
+#define _FACE_MQUEUE_H
 
-#include<face_time.h>
+#include "face_time.h"
 
 #define DEFAULT_MQUEUE_SIZE  10240
 #define DEFAULT_MAX_MSG_SIZE 1024
