@@ -30,5 +30,5 @@
 #include <face_signal.h>
 #include <face_time.h>
 #include <face_mqueue.h>
-
+#include <face_pthread_time.h>
 typedef  INT8U  OS_ERR;
