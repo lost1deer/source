@@ -1,8 +1,8 @@
-﻿#ifndef _FACE_SCHED_H
-#define _FACE_SCHED_H
-
-#include "ucos_ii.h"
+﻿#include "ucos_ii.h"
 #include "face_time.h"
+
+#ifndef FACE_SCHED_H
+#define FACE_SCHED_H
 
 typedef INT32U pid_t;    /* should have been imported from head file <sys/types.h> */
 

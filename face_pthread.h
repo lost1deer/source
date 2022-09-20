@@ -1,7 +1,10 @@
-#include <ucos_ii.h>
-#include <face_time.h>
+#include "ucos_ii.h"
+#include "face_time.h"
+#include "face_sched.h"
+
 #ifndef   FACE_PTHREAD_H
 #define   FACE_PTHREAD_H
+
 #define PTHREAD_DEFAULT_STACK_SIZE 2048
 #define PTHREAD_DEFAULT_GUARD_SIZE 256
 #define PTHREAD_DEFAULT_PRIORITY   30
@@ -20,6 +23,7 @@
 /* Defined for API with delay time */
 #define uos_WAIT_FOREVER 0xffffffffu /**< 阻塞性等待，即一直等待，直到事件发生或资源获得才返回 */
 #define uos_NO_WAIT      0x0         /**< 非阻塞性等待，即若无事件发生或无资源可获得，则返回 */
+
 typedef void * uos_hdl_t;
 typedef uos_hdl_t uos_mutex_t;
 typedef INT32U size_t;
@@ -28,18 +32,20 @@ typedef int pthread_once_t;
 //typedef struct os_event pthread_mutex_t;
 //typedef unsigned int pthread_mutexattr_t;
 typedef unsigned char uint8_t;
-typedef struct
+
+typedef struct pthread_attr_t
 {
        int        detachstate;         //线程的分离状态
        int        schedpolicy;         //线程调度策略
-       struct sched_param        schedparam;        //线程的调度参数
+	   struct sched_param schedparam;  //线程调度参数
        int         inheritsched;        //线程的继承性
        int         scope;         //线程的作用域
        long unsigned int      guardsize;         //线程栈末尾的警戒缓冲区大小
        int         stackaddr_set;
        void *      stackaddr;         //线程栈的位置
 	   long unsigned int      stacksize;         //线程栈的大小
-}pthread_attr_t;
+} pthread_attr_t;
+
 typedef struct pthread_mutexattr {
     uint8_t flag;
     int type;
@@ -55,10 +61,6 @@ typedef struct pthread_mutex {
     OS_EVENT                *mutex;
     pthread_mutexattr_t  attr;
 } pthread_mutex_t;
-int pthread_attr_init(pthread_attr_t *attr);
-int pthread_create(pthread_t * thread,
-      const pthread_attr_t * attr,
-      void *(*start_routine)(void*), void * arg);
 
 typedef struct pthread_cleanup {
     int cancel_type;
@@ -81,12 +83,16 @@ typedef struct pthread_tcb {
     char thread_name[PTHREAD_NAME_MAX_LEN + 1];  /* The thread's name. */
 } pthread_tcb_t;
 
-//static inline pthread_tcb_t* __pthread_get_tcb(pthread_t thread);
+pthread_tcb_t* __pthread_get_tcb(pthread_t thread);
+
 int       pthread_create(pthread_t *thread, const pthread_attr_t *attr,
                          void *(*start_routine)(void *), void *arg);
 int       pthread_detach(pthread_t thread);
 int       pthread_cancel(pthread_t thread);
 void      pthread_testcancel(void);
+
+pthread_t pthread_self(void); // need to support
+
 int       pthread_setcancelstate(int state, int *oldstate);
 int       pthread_setcanceltype(int type, int *oldtype);
 int       pthread_kill(pthread_t thread, int sig);

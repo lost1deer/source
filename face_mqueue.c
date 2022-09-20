@@ -15,7 +15,7 @@ struct core_mqd_t {
 	INT8U link_ctr;
 } *MQ_TABLE[MAX_NQUEUES];
 
-static inline int equal(const char *src, const char *des) {
+static int equal(const char *src, const char *des) {
 	while (*src != '\0' && *des != '\0' && *src++ == *des++);
 	if (*src == *des) return 1;
 	else return 0;

@@ -3,6 +3,16 @@
 #include <face_errno.h>
 #include <face_pthread_time.h>
 pthread_mutex_t g_pthread_lock = PTHREAD_MUTEX_INITIALIZER;
+
+// need to support
+pthread_t pthread_self(void) {
+	return NULL;
+}
+// need to support
+pthread_tcb_t* __pthread_get_tcb(pthread_t thread) {
+	return NULL;
+}
+
 int pthread_create(pthread_t *thread,
        const pthread_attr_t * attr,
        void *(*start_routine)(void*), void * arg){

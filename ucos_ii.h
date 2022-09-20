@@ -2036,8 +2036,8 @@ void          OSCtxSw                 (void);
 */
 //typedef unsigned long long size_t;
 
-typedef struct sched_param {
-    int      sched_priority; /* process execution scheduling priority */
-    uint64_t slice;          /* time slice in SCHED_RR mode (ms) */
-};
+//typedef struct sched_param {
+//    int      sched_priority; /* process execution scheduling priority */
+//    uint64_t slice;          /* time slice in SCHED_RR mode (ms) */
+//};
 #endif
