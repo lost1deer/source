@@ -9,6 +9,7 @@ int pthread_attr_init(pthread_attr_t *attr)
     param.sched_priority=APP_TASK_START_PRIO;
     param.slice=PTHREAD_DEFAULT_SLICE;
     //memset(attr, 0, sizeof(pthread_attr_t));
+	attr->flag = PTHREAD_DYN_INIT;
     attr->stacksize  = APP_TASK_START_STK_SIZE;
     attr->schedparam = param;
     attr->detachstate = PTHREAD_CREATE_JOINABLE;

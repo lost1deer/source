@@ -27,7 +27,7 @@
 typedef void * uos_hdl_t;
 typedef uos_hdl_t uos_mutex_t;
 typedef INT32U size_t;
-typedef INT16U pthread_t;
+typedef INT32U pthread_t;
 typedef int pthread_once_t;
 //typedef struct os_event pthread_mutex_t;
 //typedef unsigned int pthread_mutexattr_t;

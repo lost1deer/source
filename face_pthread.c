@@ -22,12 +22,12 @@ pthread_t pthread_self(void) {
 		OSTCBCur->OSTCBEventPtr = ptcb;
 		OS_EXIT_CRITICAL();
 	}
-	return ptcb;
+	return (pthread_t) ptcb;
 }
 
 pthread_tcb_t* __pthread_get_tcb(pthread_t thread) {
 
-	pthread_tcb_t* ptcb = thread;
+	pthread_tcb_t* ptcb = (pthread_tcb_t*) thread;
 	printf("ptcb = %d\n", ptcb->magic);
 	if ((ptcb == NULL) || (ptcb->magic != PTHREAD_TCB_MAGIC)) {
 		return NULL;
@@ -80,7 +80,8 @@ int pthread_create(pthread_t *thread,
 	}
 
 	if (ptcb->attr.detachstate == PTHREAD_CREATE_JOINABLE) {
-		ret = sem_init(&(ptcb->join_sem), 0, 0);
+		// 这里信号量初始化不支持
+		ret = 0;        // sem_init(&(ptcb->join_sem), 0, 0);
 		if (ret != 0) {
 			ret = -1;
 			if (ptcb != NULL) {
@@ -123,6 +124,7 @@ int pthread_create(pthread_t *thread,
 	OS_EXIT_CRITICAL();
 
 	*thread = ptcb;
+	pthread_tcb_t * _ptcb = (pthread_tcb_t *)(*thread);
 	return 0;
 }
 
