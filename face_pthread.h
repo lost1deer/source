@@ -35,15 +35,16 @@ typedef unsigned char uint8_t;
 
 typedef struct pthread_attr_t
 {
-       int        detachstate;         //线程的分离状态
-       int        schedpolicy;         //线程调度策略
-	   struct sched_param schedparam;  //线程调度参数
-       int         inheritsched;        //线程的继承性
-       int         scope;         //线程的作用域
-       long unsigned int      guardsize;         //线程栈末尾的警戒缓冲区大小
-       int         stackaddr_set;
-       void *      stackaddr;         //线程栈的位置
-	   long unsigned int      stacksize;         //线程栈的大小
+	uint8_t flag;
+    int        detachstate;         //线程的分离状态
+    int        schedpolicy;         //线程调度策略
+	struct sched_param schedparam;  //线程调度参数
+    int         inheritsched;        //线程的继承性
+    int         scope;         //线程的作用域
+    long unsigned int      guardsize;         //线程栈末尾的警戒缓冲区大小
+    int         stackaddr_set;
+    void *      stackaddr;         //线程栈的位置
+	long unsigned int      stacksize;         //线程栈的大小
 } pthread_attr_t;
 
 typedef struct pthread_mutexattr {
@@ -70,7 +71,7 @@ typedef struct pthread_cleanup {
 } pthread_cleanup_t;
 
 typedef struct pthread_tcb {
-    void *task;    /* The rhino task handle. */
+    void *task;    /* The uc task handle. */
     unsigned int magic; /* The pthread tcb memory magic number. */
     void *(*thread_entry)(void *para); /* The start routine of the thread. */
     void *thread_para;   /* The parameter of start routine. */

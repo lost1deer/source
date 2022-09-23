@@ -4,29 +4,128 @@
 #include <face_pthread_time.h>
 pthread_mutex_t g_pthread_lock = PTHREAD_MUTEX_INITIALIZER;
 
-// need to support
 pthread_t pthread_self(void) {
-	return NULL;
+	pthread_tcb_t *ptcb = NULL;
+	OS_ENTER_CRITICAL();
+	ptcb = OSTCBCur->OSTCBExtPtr;
+	OS_EXIT_CRITICAL();
+	if (ptcb == NULL) {
+		/* Create ptcb for native task in case that call pthread_self */
+		ptcb = (pthread_tcb_t *)malloc(sizeof(pthread_tcb_t));
+		if (ptcb == NULL) {
+			return NULL;
+		}
+		memset(ptcb, 0, sizeof(pthread_tcb_t));
+		ptcb->magic = PTHREAD_TCB_MAGIC;
+		ptcb->task = OSTCBCur;
+		OS_ENTER_CRITICAL();
+		OSTCBCur->OSTCBEventPtr = ptcb;
+		OS_EXIT_CRITICAL();
+	}
+	return ptcb;
 }
-// need to support
+
 pthread_tcb_t* __pthread_get_tcb(pthread_t thread) {
-	return NULL;
+
+	pthread_tcb_t* ptcb = thread;
+	printf("ptcb = %d\n", ptcb->magic);
+	if ((ptcb == NULL) || (ptcb->magic != PTHREAD_TCB_MAGIC)) {
+		return NULL;
+	}
+
+	return ptcb;
 }
 
 int pthread_create(pthread_t *thread,
        const pthread_attr_t * attr,
        void *(*start_routine)(void*), void * arg){
-       
-	   return OSTaskCreateExt((void(*)(void *))start_routine,              /* Create the start task                                */
-        (void          *) 0,
-        (OS_STK        *)((int *)attr->stackaddr+sizeof(CPU_STK)*(attr->stacksize-1)),
-        (INT8U          ) attr->schedparam.sched_priority,
-        (INT16U         ) *thread,
-        (OS_STK        *) attr->stackaddr,
-        (INT32U         ) attr->stacksize,
-        (void          *) 0,
-        (INT16U         )(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
+	int ret = 0;
+
+	pthread_tcb_t *ptcb = NULL;
+	pthread_tcb_t *ptcb_c = NULL;
+
+	if ((thread == NULL) || ((attr != NULL) && (attr->flag != PTHREAD_DYN_INIT))
+		|| (start_routine == NULL)) {
+		return EINVAL;
+	}
+
+	*thread = NULL;
+
+	ptcb = (pthread_tcb_t *)malloc(sizeof(pthread_tcb_t));
+	if (ptcb == NULL) {
+		return ENOMEM;
+	}
+
+	memset(ptcb, 0, sizeof(pthread_tcb_t));
+	ptcb->magic = PTHREAD_TCB_MAGIC;
+
+	if (attr != NULL) {
+		ptcb->attr = *attr;
+		if (attr->inheritsched == PTHREAD_INHERIT_SCHED) {
+			ptcb_c = __pthread_get_tcb(pthread_self());
+			if (ptcb_c != NULL) {
+				ptcb->attr = ptcb_c->attr;
+			}
+		}
+	}
+	else {
+		ret = pthread_attr_init(&(ptcb->attr));
+		if (ret != 0) {
+			if (ptcb != NULL) {
+				ptcb->magic = 0;
+				free(ptcb);
+			}
+			return ret;
+		}
+	}
+
+	if (ptcb->attr.detachstate == PTHREAD_CREATE_JOINABLE) {
+		ret = sem_init(&(ptcb->join_sem), 0, 0);
+		if (ret != 0) {
+			ret = -1;
+			if (ptcb != NULL) {
+				ptcb->magic = 0;
+				free(ptcb);
+			}
+			return ret;
+		}
+	}
+
+	ptcb->thread_entry = start_routine;
+	ptcb->thread_para = arg;
+
+	strncpy(ptcb->thread_name, "posix_thread", PTHREAD_NAME_MAX_LEN);
+
+	if (ptcb->attr.schedparam.sched_priority < 0) {
+		ret = -1;
+		sem_destroy(&(ptcb->join_sem));
+	}
+
+	OS_ENTER_CRITICAL();
+	ret = OSTaskCreateExt((void(*)(void *))start_routine,              /* Create the start task                                */
+		(void          *)0,
+		(OS_STK        *)((int *)attr->stackaddr + sizeof(CPU_STK)*(attr->stacksize - 1)),
+		(INT8U)attr->schedparam.sched_priority,
+		(INT16U)*thread,
+		(OS_STK        *)attr->stackaddr,
+		(INT32U)attr->stacksize,
+		(void          *)ptcb,
+		(INT16U)(OS_TASK_OPT_STK_CHK | OS_TASK_OPT_STK_CLR));
+
+	if (ret != 0) {
+		ret = -1;
+		sem_destroy(&(ptcb->join_sem));
+	}
+	ptcb->task = OSTCBPrioTbl[attr->schedparam.sched_priority];
+	OS_TCB *ptask_cp = NULL;
+	ptask_cp = ptcb->task;
+	ptask_cp->OSTCBExtPtr = ptcb;
+	OS_EXIT_CRITICAL();
+
+	*thread = ptcb;
+	return 0;
 }
+
 int pthread_detach(pthread_t thread)
 {
     int ret = 0;
