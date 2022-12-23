@@ -49,7 +49,7 @@ void real_time_set(sys_time_t now_ms) {
 int clock_getres(clockid_t clock_id, struct timespec *res)
 {
 	if (((clock_id != CLOCK_REALTIME) && (clock_id != CLOCK_MONOTONIC)) || (res == NULL)) {
-		errno = EINVAL;    // 不懂errno是在哪定义的？
+		errno = EINVAL;    
 		return -1;
 	}
 
