@@ -1,7 +1,7 @@
-﻿#include <ucos_ii.h>
-#include <face_time.h>
-#include <face_pthread.h>
-#include <face_errno.h>
+﻿#include "ucos_ii.h"
+#include "face_time.h"
+#include "face_pthread.h"
+#include "face_errno.h"
 #define PTHREAD_MUTEXATTR_IS_INITED(x) do { if ((x)->flag != PTHREAD_DYN_INIT) return EINVAL; } \
                                        while (0)
 int pthread_mutex_init(pthread_mutex_t *mutex, const pthread_mutexattr_t *attr){

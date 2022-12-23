@@ -1,26 +1,28 @@
-﻿#include <ucos_ii.h>
-#include <face_pthread.h>
+﻿#include "ucos_ii.h"
+#include "face_pthread.h"
 #include "face_sched.h"
-static  CPU_STK  AppTaskStartStk[APP_TASK_START_STK_SIZE];
+#include "face_errno.h"
+
+static CPU_STK AppTaskStartStk[APP_TASK_START_STK_SIZE];
 typedef INT32U size_t;
-int pthread_attr_init(pthread_attr_t *attr)
-{
+
+int pthread_attr_init(pthread_attr_t *attr) {
     struct sched_param param;
-    param.sched_priority=APP_TASK_START_PRIO;
-    param.slice=PTHREAD_DEFAULT_SLICE;
+    param.sched_priority = APP_TASK_START_PRIO;
+    param.slice = PTHREAD_DEFAULT_SLICE;
     //memset(attr, 0, sizeof(pthread_attr_t));
-	attr->flag = PTHREAD_DYN_INIT;
-    attr->stacksize  = APP_TASK_START_STK_SIZE;
+    attr->flag = PTHREAD_DYN_INIT;
+    attr->stacksize = APP_TASK_START_STK_SIZE;
     attr->schedparam = param;
     attr->detachstate = PTHREAD_CREATE_JOINABLE;
     attr->inheritsched = PTHREAD_EXPLICIT_SCHED;
     attr->guardsize = PTHREAD_DEFAULT_GUARD_SIZE;
     attr->stackaddr = &AppTaskStartStk[0];
     attr->scope = PTHREAD_SCOPE_SYSTEM;
-    return 1;
+    return 0;    // ljh: 不知道为啥这里return 1，改成0才对
 }
-int pthread_attr_destroy(pthread_attr_t *attr)
-{
+
+int pthread_attr_destroy(pthread_attr_t *attr) {
     if (attr == NULL) {
         return pthread_flase;
     }
@@ -29,11 +31,11 @@ int pthread_attr_destroy(pthread_attr_t *attr)
 
     return 1;
 }
-int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate)
-{
-    
+
+int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate) {
+
     if ((attr == NULL) || ((detachstate != PTHREAD_CREATE_DETACHED) &&
-                            (detachstate != PTHREAD_CREATE_JOINABLE)))  {
+                           (detachstate != PTHREAD_CREATE_JOINABLE))) {
         return pthread_flase;
     }
 
@@ -41,8 +43,8 @@ int pthread_attr_setdetachstate(pthread_attr_t *attr, int detachstate)
 
     return 1;
 }
-int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate)
-{
+
+int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate) {
     if ((attr == NULL) || (detachstate == NULL)) {
         return pthread_flase;
     }
@@ -52,8 +54,7 @@ int pthread_attr_getdetachstate(const pthread_attr_t *attr, int *detachstate)
     return 0;
 }
 
-int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
-{
+int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy) {
     if ((attr == NULL) || ((policy < SCHED_OTHER) || (policy > SCHED_RR))) {
         return pthread_flase;
     }
@@ -63,8 +64,7 @@ int pthread_attr_setschedpolicy(pthread_attr_t *attr, int policy)
     return 0;
 }
 
-int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy)
-{
+int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy) {
     if ((attr == NULL) || (policy == NULL)) {
         return pthread_flase;
     }
@@ -74,8 +74,7 @@ int pthread_attr_getschedpolicy(const pthread_attr_t *attr, int *policy)
     return 0;
 }
 
-int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *param)
-{
+int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *param) {
     if ((attr == NULL) || (param == NULL)) {
         return pthread_flase;
     }
@@ -85,8 +84,7 @@ int pthread_attr_setschedparam(pthread_attr_t *attr, const struct sched_param *p
     return 0;
 }
 
-int pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *param)
-{
+int pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *param) {
     if ((attr == NULL) || (param == NULL)) {
         return pthread_flase;
     }
@@ -97,8 +95,7 @@ int pthread_attr_getschedparam(const pthread_attr_t *attr, struct sched_param *p
     return 0;
 }
 
-int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize)
-{
+int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize) {
     if ((attr == NULL) || (stacksize <= 0)) {
         return pthread_flase;
     }
@@ -108,8 +105,7 @@ int pthread_attr_setstacksize(pthread_attr_t *attr, size_t stacksize)
     return 0;
 }
 
-int pthread_attr_getstacksize(const pthread_attr_t *attr, size_t *stacksize)
-{
+int pthread_attr_getstacksize(const pthread_attr_t *attr, size_t *stacksize) {
     if ((attr == NULL) || (stacksize == NULL)) {
         return pthread_flase;
     }
@@ -119,8 +115,7 @@ int pthread_attr_getstacksize(const pthread_attr_t *attr, size_t *stacksize)
     return 0;
 }
 
-int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stackaddr)
-{
+int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stackaddr) {
     if ((attr == NULL) || (stackaddr == NULL)) {
         return pthread_flase;
     }
@@ -130,8 +125,7 @@ int pthread_attr_setstackaddr(pthread_attr_t *attr, void *stackaddr)
     return 0;
 }
 
-int pthread_attr_getstackaddr(const pthread_attr_t *attr, void **stackaddr)
-{
+int pthread_attr_getstackaddr(const pthread_attr_t *attr, void **stackaddr) {
     if ((attr == NULL) || (stackaddr == NULL)) {
         return pthread_flase;
     }
@@ -141,8 +135,7 @@ int pthread_attr_getstackaddr(const pthread_attr_t *attr, void **stackaddr)
     return 0;
 }
 
-int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr, size_t stacksize)
-{
+int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr, size_t stacksize) {
     if ((attr == NULL) || (stackaddr == NULL) || (stacksize <= 0)) {
         return pthread_flase;
     }
@@ -153,8 +146,7 @@ int pthread_attr_setstack(pthread_attr_t *attr, void *stackaddr, size_t stacksiz
     return 0;
 }
 
-int pthread_attr_getstack(const pthread_attr_t *attr, void **stackaddr, size_t *stacksize)
-{
+int pthread_attr_getstack(const pthread_attr_t *attr, void **stackaddr, size_t *stacksize) {
     if ((attr == NULL) || (stackaddr == NULL) || (stacksize == NULL)) {
         return pthread_flase;
     }
@@ -165,8 +157,7 @@ int pthread_attr_getstack(const pthread_attr_t *attr, void **stackaddr, size_t *
     return 0;
 }
 
-int pthread_attr_getinheritsched(const pthread_attr_t * attr, int * inheritsched)
-{
+int pthread_attr_getinheritsched(const pthread_attr_t *attr, int *inheritsched) {
     if ((attr == NULL) || (inheritsched == NULL)) {
         return pthread_flase;
     }
@@ -176,10 +167,9 @@ int pthread_attr_getinheritsched(const pthread_attr_t * attr, int * inheritsched
     return 0;
 }
 
-int pthread_attr_setinheritsched(pthread_attr_t *attr, int inheritsched)
-{
+int pthread_attr_setinheritsched(pthread_attr_t *attr, int inheritsched) {
     if ((attr == NULL) || (inheritsched < PTHREAD_INHERIT_SCHED) ||
-                          (inheritsched > PTHREAD_EXPLICIT_SCHED)) {
+        (inheritsched > PTHREAD_EXPLICIT_SCHED)) {
         return pthread_flase;
     }
 
@@ -188,20 +178,17 @@ int pthread_attr_setinheritsched(pthread_attr_t *attr, int inheritsched)
     return 0;
 }
 
-int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize)
-{
+int pthread_attr_setguardsize(pthread_attr_t *attr, size_t guardsize) {
     /* guardsize stack protection is not supported by kernel */
     return ENOSYS;
 }
 
-int pthread_attr_getguardsize(const pthread_attr_t *attr, size_t *guardsize)
-{
+int pthread_attr_getguardsize(const pthread_attr_t *attr, size_t *guardsize) {
     /* guardsize stack protection is not supported by kernel */
     return ENOSYS;
 }
 
-int pthread_attr_getscope(const pthread_attr_t * attr, int * contentionscope)
-{
+int pthread_attr_getscope(const pthread_attr_t *attr, int *contentionscope) {
     if ((attr == NULL) || (contentionscope == NULL)) {
         return pthread_flase;
     }
@@ -211,8 +198,7 @@ int pthread_attr_getscope(const pthread_attr_t * attr, int * contentionscope)
     return 0;
 }
 
-int pthread_attr_setscope(pthread_attr_t *attr, int contentionscope)
-{
+int pthread_attr_setscope(pthread_attr_t *attr, int contentionscope) {
     if ((attr == NULL) ||
         ((contentionscope != PTHREAD_SCOPE_PROCESS) && (contentionscope != PTHREAD_SCOPE_SYSTEM))) {
         return pthread_flase;

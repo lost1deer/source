@@ -63,9 +63,6 @@ int nanosleep(const struct timespec *, struct timespec *);
 unsigned int sleep(unsigned int seconds);
 
 /*---计时器---*/
-static void timer_callback(void *timer, void *arg);
-static int64_t timespec_to_nanosecond(struct timespec *t);
-static struct timespec nanosecond_to_timespec(int64_t ns);
 int timer_create(clockid_t clockid, struct sigevent *evp, timer_t * timerid);
 int timer_delete(timer_t timerid);
 int timer_settime(timer_t timerid, int flags,

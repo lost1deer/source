@@ -21,6 +21,7 @@ static void timer_callback(void *timer, void *arg){
 static int64_t timespec_to_nanosecond(struct timespec *t){
 	return ((uint64_t)t->tv_sec * 1000000000UL + t->tv_nsec);
 }
+
 static struct timespec nanosecond_to_timespec(int64_t ns)
 {
 	struct timespec ret_time;

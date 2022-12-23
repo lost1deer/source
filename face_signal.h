@@ -1,8 +1,9 @@
 ﻿#ifndef   FACE_SIGNAL_H
 #define   FACE_SIGNAL_H
+
 #include<signal.h>
-#include<ucos_ii.h>
-#include<face_pthread.h>
+#include"ucos_ii.h"
+#include"face_pthread.h"
 
 #define SIGHUP    1
 #define SIGINT    2
@@ -45,29 +46,32 @@
 #define SIG_SETMASK   2
 
 typedef INT32U sigset_t;
+
 typedef void(*sighandler_t)(int);
+
 typedef sighandler_t _sig_func_ptr;
 
 #define SIG_ERR  ((sighandler_t)-1)
 #define SIG_DFL  ((sighandler_t) 0)
 #define SIG_IGN  ((sighandler_t) 1)
 
-#define SIGEV_NONE    1u          
+#define SIGEV_NONE    1u
 #define SIGEV_SIGNAL  2u
 #define SIGEV_THREAD  3u
 
-union sigval{
-	int sival_int;
-	void *sival_ptr;
+union sigval {
+    int sival_int;
+    void *sival_ptr;
 };
 
-struct sigevent
-{
-	int sigev_notify;
-	int sigev_signo;
-	union sigval sigev_value;
-	void (*sigev_notify_function)(union sigval);
-	struct pthread_attr_t *sigev_notify_attributes;
+struct sigevent {
+    int sigev_notify;
+    int sigev_signo;
+    union sigval sigev_value;
+
+    void (*sigev_notify_function)(union sigval);
+
+    struct pthread_attr_t *sigev_notify_attributes;
 };
 
 #endif
